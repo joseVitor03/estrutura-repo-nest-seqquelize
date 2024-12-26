@@ -1,0 +1,1 @@
+# estrutura-repo-nest-seqquelize
