@@ -111,7 +111,6 @@ const path = require('path');
 
 module.exports = {
   'config': path.resolve(__dirname, 'dist', 'database', 'config', 'database.js'),
-  'models-path': path.resolve(__dirname, 'dist', 'database', 'models'),
   'seeders-path': path.resolve(__dirname,'dist','database','seeders'),
   'migrations-path': path.resolve(__dirname,'dist','database','migrations'),
 };
@@ -124,8 +123,6 @@ database |
          | -- | config |-- database.ts
          |
          | -- | migrations | *.ts
-         |
-         | -- | models | -- *.ts
          |
          | -- seeders | *.ts 
 ```
@@ -174,68 +171,8 @@ export default {
   },
 };
 ```
-8.3 - Dentro da pasta models crie um arquivo `ìndex.ts`:
-```bash
-import { Sequelize } from 'sequelize';
-import * as config from '../config/database';
 
-export default new Sequelize(config);
-```
-8.4 - E tambem a estrutura para mapear diretamente objetos JavaScript/TypeScript para registros do banco. Crie outro arquivo dentro da pasta models:
-```bash
-import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  DataTypes,
-  CreationOptional,
-} from 'sequelize';
-import db from '.';
-
-class SeuqelizeMovies extends Model<
-  InferAttributes<SeuqelizeMovies>,
-  InferCreationAttributes<SeuqelizeMovies>
-> {
-  declare id: CreationOptional<number>;
-
-  declare title: string;
-
-  declare director: string;
-
-  declare realeseDate: string;
-}
-
-SeuqelizeMovies.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    director: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    realeseDate: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    tableName: 'movies',
-    modelName: 'movies',
-    timestamps: false,
-    sequelize: db,
-  },
-);
-
-export default SeuqelizeMovies;
-```
-8.5 - Agora vamos popular nosso banco de dados. Crie um arquivo dentro da pasta seeders com o nome por exemplo: 1-movies.ts:
+8.3 - Agora vamos popular nosso banco de dados. Crie um arquivo dentro da pasta seeders com o nome por exemplo: 1-movies.ts:
 OBS: Escrever dessa maneira faz com que os dados ou as tabelas do banco de dados vão em ordem. Por exemplo se o nosso banco tenha as tabelas: movies e series. Podemos escrever os seus arquivos com: 1-movies.ts e 2-series.ts dessa maneira eles irão ir em ordem. Isso vale para todos os arquivos que estão dentro da pasta `database`. 
 ```bash
 import { QueryInterface } from 'sequelize';
